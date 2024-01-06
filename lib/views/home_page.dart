@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                jokeBloc.add(GetJokeEvent(jokeType: jokeCategories[index]));
+                jokeBloc.add(GetJokeEvent(jokeCategory: jokeCategories[index]));
               },
               child: Container(
                 margin: const EdgeInsets.all(10),

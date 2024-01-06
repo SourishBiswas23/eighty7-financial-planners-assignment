@@ -4,6 +4,6 @@ part of 'joke_bloc.dart';
 sealed class JokeEvent {}
 
 class GetJokeEvent extends JokeEvent {
-  GetJokeEvent({required this.jokeType});
-  final String jokeType;
+  GetJokeEvent({required this.jokeCategory});
+  final String jokeCategory;
 }
