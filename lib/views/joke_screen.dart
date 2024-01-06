@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../controllers/joke_bloc/joke_bloc.dart';
+import '../routes.dart';
 import '../theme/app_theme.dart';
 
 class JokeScreen extends StatelessWidget {
@@ -32,14 +35,56 @@ class JokeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
                 ),
-                child: const Text(
-                  'This is the required joke',
-                  style: TextStyle(fontSize: AppTheme.bodySmall),
-                ),
+                  child: BlocBuilder<JokeBloc, JokeState>(
+                    builder: (context, state) {
+                      if (state is SingleJokeState) {
+                        return Text(state.joke);
+                      } else if (state is TwoPartJokeState) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: 'Setup:',
+                                    style: TextStyle(
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' ${state.setup}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: 'Delivery:',
+                                    style: TextStyle(
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: ' ${state.delivery}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return Container();
+                    },
+                  )
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  AppNavigator.pushReplace(route: AppRoutes.homePage);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
                 ),
