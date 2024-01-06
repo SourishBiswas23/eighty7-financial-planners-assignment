@@ -1,33 +1,44 @@
-import 'package:eighty_seven_financial_planners_assignment/data/providers/joke.api.dart';
-import 'package:eighty_seven_financial_planners_assignment/models/single_joke.dart';
-import 'package:eighty_seven_financial_planners_assignment/models/two_part_joke.dart';
-import 'package:logger/logger.dart';
+import 'package:dio/dio.dart';
+
+import '../../models/error_joke.dart';
+import '../../models/single_joke.dart';
+import '../../models/two_part_joke.dart';
+import '../providers/joke.api.dart';
 
 class JokesData {
   final _jokeApi = JokeApi();
-  final _logger = Logger();
 
   Future<dynamic> getJokeBycategory({required String category}) async {
     Map<String, String> categoryToUrl = {
-      'Any': '/joke/Any',
-      'Misc': '/joke/Misc',
-      'Programming': '/joke/Programming',
-      'Pun': '/joke/Pun',
-      'Spooky': '/joke/Spooky',
-      'Christmas': '/joke/Christmas',
+      'Any': '/joke/Any?safe-mode',
+      'Misc': '/joke/Misc?safe-mode',
+      'Programming': '/joke/Programming?safe-mode',
+      'Pun': '/joke/Pun?safe-mode',
+      'Spooky': '/joke/Spooky?safe-mode',
+      'Christmas': '/joke/Christmas?safe-mode',
     };
-    var response = await _jokeApi.getJokeByCategory(
-      category: categoryToUrl[category]!,
-    );
-    if (response.statusCode == 200) {
-      if (!response.data['error']) {
-        if (response.data['type'] == 'twopart') {
-          return TwoPartJoke.fromJson(json: response.data);
+    try {
+      var response = await _jokeApi.getJokeByCategory(
+        category: categoryToUrl[category]!,
+      );
+      if (response.statusCode == 200) {
+        if (!response.data['error']) {
+          if (response.data['type'] == 'twopart') {
+            return TwoPartJoke.fromJson(json: response.data);
+          } else {
+            return SingleJoke.fromJson(json: response.data);
+          }
         } else {
-          return SingleJoke.fromJson(json: response.data);
+          return ErrorJoke.fromJson(json: response.data);
         }
       }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        return ErrorJoke(message: 'You are not connected to the internet');
+      }
+      return ErrorJoke(message: e.message.toString());
+    } catch (e) {
+      return ErrorJoke(message: e.toString());
     }
-    return response.data;
   }
 }

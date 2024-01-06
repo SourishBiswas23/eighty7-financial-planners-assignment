@@ -15,3 +15,8 @@ class TwoPartJokeState extends JokeState {
   final String setup;
   final String delivery;
 }
+
+class ErrorJokeState extends JokeState {
+  ErrorJokeState({required this.message});
+  final String message;
+}

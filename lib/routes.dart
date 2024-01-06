@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'theme/app_theme.dart';
 import 'views/home_page.dart';
 import 'views/joke_screen.dart';
 import 'views/loading_screen.dart';
@@ -75,5 +76,36 @@ class AppNavigator {
 
   static void pop() {
     return navigatorKey.currentState?.pop();
+  }
+
+  static void showSnackbar({required String message}) {
+    scaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(message),
+            ),
+            TextButton(
+              onPressed: () {
+                AppNavigator.scaffoldMessengerKey.currentState
+                    ?.removeCurrentSnackBar();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: AppTheme.primaryColor,
+              ),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: AppTheme.bodyBig,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
