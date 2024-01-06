@@ -1,5 +1,7 @@
+import 'package:eighty_seven_financial_planners_assignment/controllers/joke_bloc/joke_bloc.dart';
 import 'package:eighty_seven_financial_planners_assignment/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   
   @override
   Widget build(BuildContext context) {
+    final JokeBloc jokeBloc = BlocProvider.of<JokeBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,7 +40,9 @@ class _HomePageState extends State<HomePage> {
           itemCount: jokeCategories.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: null,
+              onTap: () {
+                jokeBloc.add(GetJokeEvent(jokeType: jokeCategories[index]));
+              },
               child: Container(
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.symmetric(vertical: 20),
