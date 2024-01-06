@@ -1,4 +1,5 @@
-import 'package:eighty_seven_financial_planners_assignment/views/home_page.dart';
+import 'package:eighty_seven_financial_planners_assignment/routes.dart';
+import 'package:eighty_seven_financial_planners_assignment/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
@@ -10,9 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Eighy7 financial planners assignment',
-      home: HomePage(),
+      home: const SplashScreen(),
+      onGenerateRoute: AppNavigator.onGenerateRoute,
+      scaffoldMessengerKey: AppNavigator.scaffoldMessengerKey,
+      navigatorKey: AppNavigator.navigatorKey,
     );
   }
 }
